@@ -3,6 +3,7 @@ import { ApiService } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
 import { fmtDate, fmtMoney, fmtNumber } from '../core/format';
 import { STATUS_LABEL, badgeClass } from '../core/models';
+import { Icon } from '../shared/icon';
 
 type Kind = 'n' | 'money' | 'kg';
 interface KpiMeta {
@@ -37,26 +38,41 @@ const KPI: Record<string, KpiMeta> = {
   commandes_a_livrer: { label: 'Commandes à livrer', kind: 'n', tone: 'warn' },
 };
 
+const ICON: Record<string, string> = {
+  membres_actifs: 'users', adhesions_en_attente: 'user-plus', rendement_global: 'wheat', stock_total: 'warehouse',
+  produits_en_rupture: 'package-x', produits_niveau_faible: 'triangle-alert', revenus: 'hand-coins',
+  commandes_en_attente: 'clock', livraisons_en_cours: 'truck', collectes_a_venir: 'tractor', parcelles: 'map-pin',
+  superficie_totale: 'layers', productions_declarees: 'clipboard-list', productions_validees: 'circle-check',
+  productions_en_attente: 'clock', quantite_produite: 'scale', collectes_prevues: 'tractor', produits_en_stock: 'boxes',
+  livraisons_a_preparer: 'package', commandes_validees: 'circle-check', commandes_refusees: 'circle-x',
+  chiffre_affaires: 'hand-coins', commandes_a_livrer: 'truck',
+};
+
 @Component({
   selector: 'app-dashboard',
+  imports: [Icon],
   template: `
-    <header class="page-head">
+    <section class="greeting">
       <div>
-        <h1>Tableau de bord</h1>
-        <p class="muted">Bonjour {{ prenom() }}, voici l'activité de la coopérative.</p>
+        <h1>Bonjour {{ prenom() }}</h1>
+        <p>Voici où en est la coopérative aujourd'hui.</p>
       </div>
-    </header>
+      <span class="greeting-date"><app-icon name="calendar-days" />{{ today }}</span>
+    </section>
 
     @if (error()) {
-      <p class="alert error">{{ error() }}</p>
+      <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
     } @else if (loading()) {
       <p class="muted">Chargement…</p>
     } @else {
       <section class="kpi-grid">
         @for (k of cards(); track k.label) {
           <article class="kpi" [class.warn]="k.tone === 'warn'" [class.bad]="k.tone === 'bad'">
-            <span class="kpi-label">{{ k.label }}</span>
-            <strong class="kpi-value">{{ k.value }}</strong>
+            <span class="kpi-icon"><app-icon [name]="k.icon" /></span>
+            <div class="kpi-body">
+              <span class="kpi-label">{{ k.label }}</span>
+              <strong class="kpi-value">{{ k.value }}</strong>
+            </div>
           </article>
         }
       </section>
@@ -121,10 +137,11 @@ export class DashboardPage implements OnInit {
       const meta = KPI[key] ?? { label: key, kind: 'n' as Kind };
       const text = meta.kind === 'money' ? fmtMoney(value) : meta.kind === 'kg' ? `${fmtNumber(value)} kg` : fmtNumber(value);
       // une alerte à 0 n'est pas une alerte
-      return { label: meta.label, value: text, tone: value > 0 ? meta.tone : undefined };
+      return { label: meta.label, value: text, icon: ICON[key] ?? 'chart-no-axes-column', tone: value > 0 ? meta.tone : undefined };
     });
   });
 
+  today = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   fmtNumber = fmtNumber;
   fmtDate = fmtDate;
   badgeClass = badgeClass;

@@ -5,6 +5,7 @@ import { ApiService } from '../core/api.service';
 import { fmtDate, fmtMoney, fmtNumber } from '../core/format';
 import { Col, Kpi, PageConfig, RowAction, STATUS_LABEL, badgeClass } from '../core/models';
 import { FormModal } from '../shared/form-modal';
+import { Icon } from '../shared/icon';
 
 /**
  * Page de liste générique : la configuration (colonnes, formulaire, actions par ligne)
@@ -12,7 +13,7 @@ import { FormModal } from '../shared/form-modal';
  */
 @Component({
   selector: 'app-resource-page',
-  imports: [FormsModule, RouterLink, FormModal],
+  imports: [FormsModule, RouterLink, FormModal, Icon],
   template: `
     <header class="page-head">
       <div>
@@ -22,18 +23,18 @@ import { FormModal } from '../shared/form-modal';
         }
       </div>
       @if (cfg.create) {
-        <button class="btn primary" (click)="showCreate.set(true)">+ {{ cfg.create.label }}</button>
+        <button class="btn primary" (click)="showCreate.set(true)"><app-icon name="plus" />{{ cfg.create.label }}</button>
       }
       @if (cfg.createLink) {
-        <a class="btn primary" [routerLink]="cfg.createLink.to">+ {{ cfg.createLink.label }}</a>
+        <a class="btn primary" [routerLink]="cfg.createLink.to"><app-icon name="plus" />{{ cfg.createLink.label }}</a>
       }
     </header>
 
     @if (notice()) {
-      <p class="alert success">{{ notice() }}</p>
+      <p class="alert success"><app-icon name="circle-check" />{{ notice() }}</p>
     }
     @if (error()) {
-      <p class="alert error">{{ error() }}</p>
+      <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
     }
 
     @if (kpis().length) {
@@ -49,13 +50,19 @@ import { FormModal } from '../shared/form-modal';
 
     <section class="card">
       @if (cfg.searchable !== false && rows().length > 5) {
-        <input class="search" type="search" placeholder="Rechercher…" [ngModel]="search()" (ngModelChange)="search.set($event)" />
+        <label class="search-box">
+          <app-icon name="search" />
+          <input type="search" placeholder="Rechercher dans la liste" aria-label="Rechercher" [ngModel]="search()" (ngModelChange)="search.set($event)" />
+        </label>
       }
 
       @if (loading()) {
         <p class="muted pad">Chargement…</p>
       } @else if (!filtered().length) {
-        <p class="muted pad">{{ cfg.emptyText ?? 'Aucune donnée à afficher.' }}</p>
+        <div class="empty">
+          <app-icon name="package" />
+          <p class="muted">{{ cfg.emptyText ?? 'Aucune donnée à afficher.' }}</p>
+        </div>
       } @else {
         <div class="table-wrap">
           <table>

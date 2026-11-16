@@ -138,5 +138,6 @@ export interface PageConfig {
 export interface NavItem {
   label?: string;
   to?: string;
+  icon?: string;
   section?: string;
 }

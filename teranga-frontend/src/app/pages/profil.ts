@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
 import { ROLE_LABEL, User } from '../core/models';
+import { Icon } from '../shared/icon';
 
 @Component({
   selector: 'app-profil',
-  imports: [FormsModule],
+  imports: [FormsModule, Icon],
   template: `
     <header class="page-head">
       <div>
@@ -16,10 +17,10 @@ import { ROLE_LABEL, User } from '../core/models';
     </header>
 
     @if (notice()) {
-      <p class="alert success">{{ notice() }}</p>
+      <p class="alert success"><app-icon name="circle-check" />{{ notice() }}</p>
     }
     @if (error()) {
-      <p class="alert error">{{ error() }}</p>
+      <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
     }
 
     <form class="card" (ngSubmit)="save()">

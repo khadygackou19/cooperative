@@ -2,6 +2,7 @@ import { Component, OnInit, inject, input, output, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../core/api.service';
 import { Field, Option } from '../core/models';
+import { Icon } from './icon';
 
 /**
  * Fenêtre de formulaire générique, pilotée par une liste de champs.
@@ -9,13 +10,13 @@ import { Field, Option } from '../core/models';
  */
 @Component({
   selector: 'app-form-modal',
-  imports: [FormsModule],
+  imports: [FormsModule, Icon],
   template: `
     <div class="overlay" (click)="closed.emit()">
       <div class="modal" (click)="$event.stopPropagation()" role="dialog" [attr.aria-label]="title()">
         <div class="modal-head">
           <h2>{{ title() }}</h2>
-          <button type="button" class="icon-btn" (click)="closed.emit()" aria-label="Fermer">×</button>
+          <button type="button" class="icon-btn" (click)="closed.emit()" aria-label="Fermer"><app-icon name="x" size="1.25rem" /></button>
         </div>
 
         <form (ngSubmit)="save()" class="form-grid">
@@ -54,7 +55,7 @@ import { Field, Option } from '../core/models';
           }
 
           @if (error()) {
-            <p class="alert error wide">{{ error() }}</p>
+            <p class="alert error wide"><app-icon name="triangle-alert" />{{ error() }}</p>
           }
 
           <div class="modal-actions wide">

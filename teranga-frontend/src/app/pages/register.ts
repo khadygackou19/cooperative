@@ -3,20 +3,24 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
+import { AuthArt } from '../shared/auth-art';
+import { Icon } from '../shared/icon';
 import { Logo } from '../shared/logo';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLink, Logo],
+  imports: [FormsModule, RouterLink, Logo, AuthArt, Icon],
   template: `
     <main class="auth-page">
+      <app-auth-art />
+      <div class="auth-panel">
       <section class="auth-card wide-card">
-        <div class="auth-brand"><app-logo [size]="52" /></div>
+        <div class="auth-mobile-brand"><app-logo [size]="44" /></div>
         <h1>Demande d'adhésion</h1>
         <p class="muted">Renseignez vos informations. Un administrateur validera votre demande avant que vous puissiez accéder à votre espace.</p>
 
         @if (done()) {
-          <p class="alert success">{{ done() }}</p>
+          <p class="alert success"><app-icon name="circle-check" />{{ done() }}</p>
           <a class="btn primary block" routerLink="/login">Retour à la connexion</a>
         } @else {
           <form (ngSubmit)="submit()" class="form-grid">
@@ -29,14 +33,15 @@ import { Logo } from '../shared/logo';
             <label class="field"><span>Confirmer le mot de passe *</span><input type="password" name="password_confirmation" [ngModel]="m()['password_confirmation']" (ngModelChange)="set('password_confirmation', $event)" autocomplete="new-password" /></label>
 
             @if (error()) {
-              <p class="alert error wide">{{ error() }}</p>
+              <p class="alert error wide"><app-icon name="triangle-alert" />{{ error() }}</p>
             }
 
-            <button class="btn primary block wide" type="submit" [disabled]="busy()">{{ busy() ? 'Envoi…' : 'Envoyer ma demande' }}</button>
+            <button class="btn primary block wide" type="submit" [disabled]="busy()"><app-icon name="user-plus" />{{ busy() ? 'Envoi…' : 'Envoyer ma demande' }}</button>
           </form>
           <p class="auth-foot">Déjà membre ? <a routerLink="/login">Se connecter</a></p>
         }
       </section>
+      </div>
     </main>
   `,
 })

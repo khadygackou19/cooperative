@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../core/api.service';
 import { fmtMoney, fmtNumber } from '../core/format';
+import { Icon } from '../shared/icon';
 
 interface Ligne {
   produit_id: number | '';
@@ -13,9 +14,9 @@ interface Ligne {
 /** Saisie d'une commande client avec plusieurs lignes de produits. */
 @Component({
   selector: 'app-nouvelle-commande',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, Icon],
   template: `
-    <a class="back" routerLink="/commercial/commandes">← Retour aux commandes</a>
+    <a class="back" routerLink="/commercial/commandes"><app-icon name="arrow-left" />Retour aux commandes</a>
 
     <header class="page-head">
       <div>
@@ -25,7 +26,7 @@ interface Ligne {
     </header>
 
     @if (error()) {
-      <p class="alert error">{{ error() }}</p>
+      <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
     }
 
     <form class="card" (ngSubmit)="submit()">
@@ -47,7 +48,7 @@ interface Ligne {
 
       <h2>Produits</h2>
       @if (!produits().length && !loading()) {
-        <p class="alert warn">Aucun produit disponible en stock pour le moment.</p>
+        <p class="alert warn"><app-icon name="triangle-alert" />Aucun produit disponible en stock pour le moment.</p>
       }
 
       @for (l of lignes(); track $index; let i = $index) {
@@ -70,11 +71,11 @@ interface Ligne {
             <input type="number" min="0" step="any" [name]="'u' + i" [ngModel]="l.prix_unitaire" (ngModelChange)="setLigne(i, 'prix_unitaire', $event)" />
           </label>
           <div class="line-total">{{ fmtMoney(sousTotal(l)) }}</div>
-          <button type="button" class="icon-btn" (click)="retirer(i)" [disabled]="lignes().length === 1" aria-label="Retirer la ligne">×</button>
+          <button type="button" class="icon-btn" (click)="retirer(i)" [disabled]="lignes().length === 1" aria-label="Retirer la ligne"><app-icon name="x" size="1.2rem" /></button>
         </div>
       }
 
-      <button type="button" class="btn ghost small" (click)="ajouter()">+ Ajouter un produit</button>
+      <button type="button" class="btn ghost small" (click)="ajouter()"><app-icon name="plus" />Ajouter un produit</button>
 
       <div class="total-bar">
         <span>Montant total</span>

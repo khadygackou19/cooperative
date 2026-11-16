@@ -3,16 +3,17 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../core/api.service';
 import { fmtDate, fmtNumber } from '../core/format';
 import { STATUS_LABEL, badgeClass } from '../core/models';
+import { Icon } from '../shared/icon';
 
 /** Détail d'un entrepôt (bouton « Voir » de la liste des entrepôts). */
 @Component({
   selector: 'app-entrepot-detail',
-  imports: [RouterLink],
+  imports: [RouterLink, Icon],
   template: `
-    <a class="back" routerLink="/magasinier/entrepots">← Retour aux entrepôts</a>
+    <a class="back" routerLink="/magasinier/entrepots"><app-icon name="arrow-left" />Retour aux entrepôts</a>
 
     @if (error()) {
-      <p class="alert error">{{ error() }}</p>
+      <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
     } @else if (!e()) {
       <p class="muted">Chargement…</p>
     } @else {

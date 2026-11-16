@@ -1,8 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { ApiService } from '../core/api.service';
+import { Icon } from '../shared/icon';
 
 @Component({
   selector: 'app-rapports',
+  imports: [Icon],
   template: `
     <header class="page-head">
       <div>
@@ -12,7 +14,7 @@ import { ApiService } from '../core/api.service';
     </header>
 
     @if (error()) {
-      <p class="alert error">{{ error() }}</p>
+      <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
     }
 
     <section class="card report">
@@ -20,7 +22,7 @@ import { ApiService } from '../core/api.service';
         <h2>Rapport de synthèse</h2>
         <p class="muted">État des stocks, ventes réalisées avec chiffre d'affaires et liste des livraisons.</p>
       </div>
-      <button class="btn primary" (click)="download()" [disabled]="busy()">{{ busy() ? 'Génération…' : 'Télécharger le PDF' }}</button>
+      <button class="btn primary" (click)="download()" [disabled]="busy()"><app-icon name="download" />{{ busy() ? 'Génération…' : 'Télécharger le PDF' }}</button>
     </section>
   `,
 })

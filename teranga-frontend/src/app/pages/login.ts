@@ -3,15 +3,19 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../core/api.service';
 import { AuthService } from '../core/auth.service';
+import { AuthArt } from '../shared/auth-art';
+import { Icon } from '../shared/icon';
 import { Logo } from '../shared/logo';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, RouterLink, Logo],
+  imports: [FormsModule, RouterLink, Logo, AuthArt, Icon],
   template: `
     <main class="auth-page">
+      <app-auth-art />
+      <div class="auth-panel">
       <section class="auth-card">
-        <div class="auth-brand"><app-logo [size]="52" /></div>
+        <div class="auth-mobile-brand"><app-logo [size]="44" /></div>
         <h1>Connexion</h1>
         <p class="muted">Accédez à votre espace de la coopérative.</p>
 
@@ -26,14 +30,15 @@ import { Logo } from '../shared/logo';
           </label>
 
           @if (error()) {
-            <p class="alert error">{{ error() }}</p>
+            <p class="alert error"><app-icon name="triangle-alert" />{{ error() }}</p>
           }
 
-          <button class="btn primary block" type="submit" [disabled]="busy()">{{ busy() ? 'Connexion…' : 'Se connecter' }}</button>
+          <button class="btn primary block" type="submit" [disabled]="busy()"><app-icon name="log-out" />{{ busy() ? 'Connexion…' : 'Se connecter' }}</button>
         </form>
 
         <p class="auth-foot">Vous êtes agriculteur ? <a routerLink="/inscription">Demander mon adhésion</a></p>
       </section>
+      </div>
     </main>
   `,
 })
