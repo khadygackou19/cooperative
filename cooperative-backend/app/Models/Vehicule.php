@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Vehicule extends Model
+{
+    protected $guarded = [];
+
+    protected function casts(): array
+    {
+        return ['disponible' => 'boolean', 'capacite_kg' => 'float'];
+    }
+}
